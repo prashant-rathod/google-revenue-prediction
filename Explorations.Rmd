@@ -1,0 +1,101 @@
+---
+title: "808W_Project"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(ggplot2)
+setwd('C:/Users/USER/Desktop/umd/ENPM808W/project/google-revenue-prediction')
+df <- read.csv(file="train.csv")
+test <- read.csv(file="testclean.csv")
+head(df)
+```
+
+
+```{r}
+head(test)
+```
+
+```{r}
+p<-ggplot(data=df, aes(channelGrouping, color = channelGrouping, fill = channelGrouping))
+p <- p + geom_histogram(stat = "count", binwidth = 3, show.legend = FALSE)
+p <- p + theme(axis.text.x=element_text(angle=90, hjust=1))
+p <- p + ggtitle("Channel Groupings")
+p
+```
+
+```{r}
+#summary(df$device.browser)
+p<-ggplot(data=df, aes(device.browser, color = device.browser, fill = device.browser))
+p <- p + geom_histogram(stat = "count", binwidth = 3, show.legend = FALSE)
+p <- p + theme(axis.text.x=element_text(angle=90, hjust=1))
+p <- p + ggtitle("No. device browsers 2016 to 2018")
+p
+```
+
+```{r}
+p<-ggplot(data=df, aes(device.deviceCategory, color = device.deviceCategory, fill = device.deviceCategory))
+p <- p + geom_histogram(stat = "count", binwidth = 3, show.legend = FALSE)
+p <- p + theme(axis.text.x=element_text(angle=90, hjust=1))
+p <- p + ggtitle("Device category")
+p
+```
+
+```{r}
+p<-ggplot(data=df, aes(device.isMobile, color = device.isMobile, fill = device.isMobile))
+p <- p + geom_histogram(stat = "count", binwidth = 3, show.legend = FALSE)
+p <- p + theme(axis.text.x=element_text(angle=90, hjust=1))
+p <- p + ggtitle("Device isMobile?")
+p
+```
+```{r}
+summary(df$device.operatingSystem)
+p<-ggplot(data=df, aes(device.operatingSystem, color = device.operatingSystem, fill = device.operatingSystem))
+p <- p + geom_histogram(stat = "count", binwidth = 3, show.legend = FALSE)
+p <- p + theme(axis.text.x=element_text(angle=90, hjust=1))
+p <- p + ggtitle("Device operating system")
+p
+```
+
+```{r}
+df$transactionLogRevenue <- log1p(df$totals.transactionRevenue)
+g <- ggplot(df, aes(x = geoNetwork.subContinent, y = transactionLogRevenue)) +
+        geom_boxplot() + theme(legend.position="none") + coord_flip()
+g
+```
+
+```{r}
+p<-ggplot(data=df, aes(geoNetwork.country, color = geoNetwork.country, fill = geoNetwork.country))
+p <- p + geom_histogram(stat = "count", binwidth = 3, show.legend = FALSE)
+p <- p + theme(axis.text.x=element_text(angle=90, hjust=1))
+p <- p + ggtitle("countries")
+p
+```
+
+#train data time range
+```{r}
+time_range <- range(df$date)
+print(time_range)
+```
+
+#test data time range
+```{r}
+time_range <- range(test$date)
+print(time_range)
+```
+
+```{r}
+rev_range <- round(range(df$totals.transactionRevenue, na.rm=TRUE), 2)
+print(rev_range)
+```
+
