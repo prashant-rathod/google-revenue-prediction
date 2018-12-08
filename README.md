@@ -22,7 +22,9 @@
     
 5. Predictive Modelling
     1. Linear Regression -> LinearRegression.Rmd
-    2. DT -> DecisionTree.Rmd
+    2. DT -> To covert categorical variables to factors and to add new variables -> preprocess_enpm.ipynb 
+             Output: train_preprocessed.csv, test_preprocessed.csv   
+             DecisionTree.Rmd(Run Decision tree using train_preprocessed.csv, test_preprocessed.csv)
     2. Random Forest -> RandomForest.ipynb
     3. LGBM -> lgbm.ipynb & lgbm.py
     4. NN -> mlp.ipynb & mlp.py
