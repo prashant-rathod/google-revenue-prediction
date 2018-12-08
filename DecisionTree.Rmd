@@ -1,0 +1,160 @@
+---
+title: "GA Customer Revenue Production"
+author: "Nisha Dayananda"
+date: "12/1/2018"
+output: html_document
+---
+
+```{r}
+train_df <- read.csv("/Users/nisha_dayanand/Desktop/ENPM808/Project/google-revenue-prediction/train_preprocessed.csv")
+test_df <- read.csv("/Users/nisha_dayanand/Desktop/ENPM808/Project/google-revenue-prediction/test_preprocessed.csv")
+
+head(train_df)
+head(test_df)
+```
+```{r}
+library(rpart)
+library(rattle)
+
+train_df$logRevenue <- log(train_df$totals.transactionRevenue + 1)
+test_df$logRevenue <- log(test_df$totals.transactionRevenue + 1)
+```
+
+```{r}
+set.seed(123) 
+index <- sample(1:nrow(train_df),size = 0.8*nrow(train_df)) 
+train <- train_df[index,]
+test <- train_df[-index,]
+```
+
+```{r}
+rt <- rpart(logRevenue ~ totals.pageviews +
+            totals.hits +
+            totals.sessionQualityDim + 
+            totals.timeOnSite + 
+            visit_hour + 
+            visitNumber + 
+            trafficSource.referralPath + 
+            geoNetwork.country + 
+            geoNetwork.metro, data=train)
+
+test.pred.rtree <- predict(rt,test)
+RMSE.rtree <- sqrt(mean((test.pred.rtree-test$logRevenue)^2))
+RMSE.rtree
+```
+```{r}
+fancyRpartPlot(rt)
+```
+
+```{r}
+test_df.pred.rtree <- predict(rt,test_df)
+RMSE.rtree <- sqrt(mean((test.pred.rtree-test$logRevenue)^2))
+RMSE.rtree
+```
+
+```{r}
+rt1 <- rpart(logRevenue ~ totals.pageviews +
+            totals.hits +
+            totals.sessionQualityDim + 
+            totals.timeOnSite, data=train)
+
+test.pred.rtree1 <- predict(rt1,test)
+RMSE.rtree1 <- sqrt(mean((test.pred.rtree1-test$logRevenue)^2))
+RMSE.rtree1
+```
+
+
+```{r}
+fancyRpartPlot(rt1)
+```
+
+
+```{r}
+test_df.pred.rtree1 <- predict(rt1,test_df)
+RMSE.rtree1 <- sqrt(mean((test.pred.rtree1-test$logRevenue)^2))
+RMSE.rtree1
+```
+
+
+```{r}
+rt2 <- rpart(logRevenue ~ totals.pageviews +
+            totals.hits +
+            totals.sessionQualityDim + 
+            totals.timeOnSite + visit_hour, data=train)
+
+test.pred.rtree2 <- predict(rt2,test)
+RMSE.rtree2 <- sqrt(mean((test.pred.rtree2-test$logRevenue)^2))
+RMSE.rtree2
+```
+```{r}
+fancyRpartPlot(rt2)
+```
+
+```{r}
+test_df.pred.rtree2 <- predict(rt2,test_df)
+RMSE.rtree2 <- sqrt(mean((test.pred.rtree2-test$logRevenue)^2))
+RMSE.rtree2
+```
+
+```{r}
+rt3 <- rpart(logRevenue ~ totals.pageviews +
+            totals.hits +
+            geoNetwork.region, data=train)
+
+test.pred.rtree3 <- predict(rt3,test)
+RMSE.rtree3 <- sqrt(mean((test.pred.rtree3-test$logRevenue)^2))
+RMSE.rtree3
+```
+
+```{r}
+fancyRpartPlot(rt3)
+```
+
+```{r}
+test_df.pred.rtree3 <- predict(rt3,test_df)
+RMSE.rtree3 <- sqrt(mean((test.pred.rtree3-test$logRevenue)^2))
+RMSE.rtree3
+```
+
+```{r}
+rt4 <- rpart(logRevenue ~ totals.pageviews +
+            totals.hits +
+            geoNetwork.region + device.deviceCategory, data=train)
+test.pred.rtree4 <- predict(rt4,test)
+RMSE.rtree4 <- sqrt(mean((test.pred.rtree4-test$logRevenue)^2))
+RMSE.rtree4
+```
+
+```{r}
+fancyRpartPlot(rt4)
+```
+
+```{r}
+test_df.pred.rtree4 <- predict(rt4,test_df)
+RMSE.rtree4 <- sqrt(mean((test.pred.rtree4-test$logRevenue)^2))
+RMSE.rtree4
+```
+```{r}
+rt5 <- rpart(logRevenue ~ totals.pageviews +
+            totals.hits +
+            totals.sessionQualityDim, data=train)
+
+test.pred.rtree5 <- predict(rt5,test)
+RMSE.rtree5 <- sqrt(mean((test.pred.rtree5-test$logRevenue)^2))
+RMSE.rtree5
+```
+
+```{r}
+fancyRpartPlot(rt5)
+```
+
+```{r}
+test_df.pred.rtree5 <- predict(rt5,test_df)
+RMSE.rtree5 <- sqrt(mean((test.pred.rtree5-test$logRevenue)^2))
+RMSE.rtree5
+```
+
+
+```{r}
+
+```

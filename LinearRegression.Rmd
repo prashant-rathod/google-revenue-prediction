@@ -1,0 +1,92 @@
+---
+title: "LinearRegression"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(corrplot)
+library(ggplot2)
+setwd('C:/Users/USER/Desktop/umd/ENPM808W/project/google-revenue-prediction')
+train_df <- read.csv(file="trainclean.csv")
+test <- read.csv(file="testclean.csv")
+head(train_df)
+```
+
+#correlation matrix
+```{r}
+train_df$totals.bounces <- NULL
+train_df$totals.newVisits <- NULL
+M <- cor(train_df[sapply(train_df, function(x) is.numeric(x))], use="pairwise.complete.obs")
+corrplot(M, method="circle")
+```
+
+```{r}
+train_df$transactionLogRevenue <- log1p(train_df$totals.transactionRevenue)
+test$transactionLogRevenue <- log1p(test$totals.transactionRevenue)
+head(train_df)
+```
+
+#Splitting the train data into test and train set based on date
+```{r}
+testset <- train_df[train_df$date > 20171231, ]
+trainset <- train_df[train_df$date <= 20171231, ]
+```
+
+```{r}
+RMSE <- function(m, o){
+  sqrt(mean((m - o)^2))
+}
+```
+
+```{r}
+error <- function(df, name, model, test) {
+  p <- predict(model, test)
+  p <- as.data.frame(p)
+  p$p[is.na(p$p)] <- 0
+  df <- rbind(df, data.frame(model=c(name), rmse=c(RMSE(test$transactionLogRevenue, p$p))))
+  return(df)
+}
+```
+
+#Analyzing models to predict transactionLogRevenue
+```{r}
+results <- data.frame()
+results <- error(results, "channelGrouping", lm(transactionLogRevenue~ channelGrouping, data=trainset), testset)
+results <- error(results, "totals.pageviews", lm(transactionLogRevenue~ totals.pageviews, data=trainset), testset)
+results <- error(results, "totals.hits+totals.pageviews+totals.sessionQualityDim", lm(transactionLogRevenue ~ totals.hits+totals.pageviews+totals.sessionQualityDim, data=trainset), testset)
+results <- error(results, "geoNetwork.metro+geoNetwork.region+totals.hits", lm(transactionLogRevenue~ geoNetwork.metro+geoNetwork.region+totals.hits, data=trainset), testset)
+results <- error(results, "geoNetwork.metro+geoNetwork.continent+totals.sessionQualityDim", lm(transactionLogRevenue~ geoNetwork.metro+geoNetwork.continent+totals.sessionQualityDim, data=trainset), testset)
+results <- error(results, "geoNetwork.country+trafficSource.isTrueDirect+trafficSource.referralPath", lm(transactionLogRevenue~ geoNetwork.country+trafficSource.isTrueDirect+trafficSource.referralPath, data=trainset), testset)
+results <- error(results, "geoNetwork.country+totals.timeOnSite+visitId", lm(transactionLogRevenue~ geoNetwork.country+totals.timeOnSite+visitId, data=trainset), testset)
+results <- error(results, "device.deviceCategorytotals.hits+totals.pageviews+visitId", lm(transactionLogRevenue~ device.deviceCategory+totals.hits+totals.pageviews+visitId, data=trainset), testset)
+results
+```
+
+```{r}
+plot(trainset$totals.pageviews, trainset$transactionLogRevenue ,xlab="Pageviews", ylab="transactionLogRevenue")
+fit.lm <- lm(transactionLogRevenue~ totals.pageviews, data=trainset)
+abline(fit.lm,col="red",lwd=3)
+```
+
+#Predicting on test data
+```{r}
+mod1 <- lm(transactionLogRevenue~ totals.hits+totals.pageviews+totals.sessionQualityDim, data=train_df)
+```
+
+```{r}
+summary(mod1)
+```
+
+```{r}
+p <- predict(mod1, test)
+p <- as.data.frame(p)
+p$p[is.na(p$p)] <- 0
+p$p[p$p<0] <- 0
+result_df <- data.frame(fullVisitorId=test$fullVisitorId, transactionRevenue=test$totals.totalTransactionRevenue, predictedRevenue=expm1(p$p))
+result_df <- aggregate(. ~ fullVisitorId, result_df, sum)
+RMSE(log1p(result_df$transactionRevenue), log1p(result_df$predictedRevenue))
+```
