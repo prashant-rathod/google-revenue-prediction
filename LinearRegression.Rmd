@@ -10,10 +10,12 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(corrplot)
 library(ggplot2)
-setwd('C:/Users/USER/Desktop/umd/ENPM808W/project/google-revenue-prediction')
-train_df <- read.csv(file="trainclean.csv")
-test <- read.csv(file="testclean.csv")
+setwd('.')
+train_df <- read.csv(file="train.csv")
+test <- read.csv(file="test.csv")
 head(train_df)
+train_df$fullVisitorId <- as.character(train_df$fullVisitorId)
+test$fullVisitorId <- as.character(test$fullVisitorId)
 ```
 
 #correlation matrix
@@ -25,16 +27,25 @@ corrplot(M, method="circle")
 ```
 
 ```{r}
+train_df$totals.transactionRevenue[is.na(train_df$totals.transactionRevenue)] <- 0
+test$totals.transactionRevenue[is.na(test$totals.transactionRevenue)] <- 0
 train_df$transactionLogRevenue <- log1p(train_df$totals.transactionRevenue)
 test$transactionLogRevenue <- log1p(test$totals.transactionRevenue)
+train_df$date = as.Date(train_df$date)
+test$date = as.Date(test$date)
 head(train_df)
 ```
 
 #Splitting the train data into test and train set based on date
 ```{r}
-testset <- train_df[train_df$date > 20171231, ]
-trainset <- train_df[train_df$date <= 20171231, ]
+testset <- train_df[train_df$date > as.Date('2017-12-31'), ]
+trainset <- train_df[train_df$date <= as.Date('2017-12-31'), ]
 ```
+
+```{r}
+head(trainset)
+```
+
 
 ```{r}
 RMSE <- function(m, o){
@@ -52,29 +63,39 @@ error <- function(df, name, model, test) {
 }
 ```
 
+Let's visualize the relationship of the target variable with each of the correlated variables.
+```{r}
+plot(trainset$totals.pageviews, trainset$transactionLogRevenue ,xlab="Pageviews", ylab="transactionLogRevenue")
+fit.lm <- lm(transactionLogRevenue~ totals.pageviews, data=trainset)
+abline(fit.lm,col="red",lwd=3)
+```
+```{r}
+plot(trainset$totals.hits, trainset$transactionLogRevenue ,xlab="Hits", ylab="transactionRevenue")
+fit.lm <- lm(transactionLogRevenue~ totals.hits, data=trainset)
+abline(fit.lm,col="red",lwd=3)
+```
+
+```{r}
+plot(trainset$totals.sessionQualityDim, trainset$transactionLogRevenue ,xlab="sessionQualityDim", ylab="transactionLogRevenue")
+fit.lm <- lm(transactionLogRevenue ~ totals.sessionQualityDim, data=trainset)
+abline(fit.lm,col="red",lwd=3)
+```
+
 #Analyzing models to predict transactionLogRevenue
 ```{r}
 results <- data.frame()
 results <- error(results, "channelGrouping", lm(transactionLogRevenue~ channelGrouping, data=trainset), testset)
 results <- error(results, "totals.pageviews", lm(transactionLogRevenue~ totals.pageviews, data=trainset), testset)
 results <- error(results, "totals.hits+totals.pageviews+totals.sessionQualityDim", lm(transactionLogRevenue ~ totals.hits+totals.pageviews+totals.sessionQualityDim, data=trainset), testset)
-results <- error(results, "geoNetwork.metro+geoNetwork.region+totals.hits", lm(transactionLogRevenue~ geoNetwork.metro+geoNetwork.region+totals.hits, data=trainset), testset)
-results <- error(results, "geoNetwork.metro+geoNetwork.continent+totals.sessionQualityDim", lm(transactionLogRevenue~ geoNetwork.metro+geoNetwork.continent+totals.sessionQualityDim, data=trainset), testset)
-results <- error(results, "geoNetwork.country+trafficSource.isTrueDirect+trafficSource.referralPath", lm(transactionLogRevenue~ geoNetwork.country+trafficSource.isTrueDirect+trafficSource.referralPath, data=trainset), testset)
-results <- error(results, "geoNetwork.country+totals.timeOnSite+visitId", lm(transactionLogRevenue~ geoNetwork.country+totals.timeOnSite+visitId, data=trainset), testset)
+results <- error(results, "totals.pageviews+totals.timeOnSite+totals.sessionQualityDim", lm(transactionLogRevenue ~ totals.pageviews+totals.timeOnSite+totals.sessionQualityDim, data=trainset), testset)
+results <- error(results, "totals.hits+totals.pageviews+totals.timeOnSite+totals.sessionQualityDim", lm(transactionLogRevenue~ totals.hits+totals.pageviews+totals.timeOnSite+totals.sessionQualityDim, data=trainset), testset)
 results <- error(results, "device.deviceCategorytotals.hits+totals.pageviews+visitId", lm(transactionLogRevenue~ device.deviceCategory+totals.hits+totals.pageviews+visitId, data=trainset), testset)
 results
 ```
 
-```{r}
-plot(trainset$totals.pageviews, trainset$transactionLogRevenue ,xlab="Pageviews", ylab="transactionLogRevenue")
-fit.lm <- lm(transactionLogRevenue~ totals.pageviews, data=trainset)
-abline(fit.lm,col="red",lwd=3)
-```
-
 #Predicting on test data
 ```{r}
-mod1 <- lm(transactionLogRevenue~ totals.hits+totals.pageviews+totals.sessionQualityDim, data=train_df)
+mod1 <- lm(transactionLogRevenue~ totals.pageviews+totals.timeOnSite+totals.sessionQualityDim, data=train_df)
 ```
 
 ```{r}
@@ -82,6 +103,8 @@ summary(mod1)
 ```
 
 ```{r}
+start_time <- Sys.time()
+mod1 <- lm(transactionLogRevenue~ totals.pageviews+totals.timeOnSite+totals.sessionQualityDim, data=train_df)
 p <- predict(mod1, test)
 p <- as.data.frame(p)
 p$p[is.na(p$p)] <- 0
@@ -89,4 +112,9 @@ p$p[p$p<0] <- 0
 result_df <- data.frame(fullVisitorId=test$fullVisitorId, transactionRevenue=test$totals.totalTransactionRevenue, predictedRevenue=expm1(p$p))
 result_df <- aggregate(. ~ fullVisitorId, result_df, sum)
 RMSE(log1p(result_df$transactionRevenue), log1p(result_df$predictedRevenue))
+end_time <- Sys.time()
+```
+
+```{r}
+end_time - start_time
 ```
