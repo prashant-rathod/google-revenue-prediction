@@ -13115,7 +13115,7 @@ div#notebook {
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -13126,42 +13126,11 @@ div#notebook {
 <span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">preprocessing</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">metrics</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Requirement already satisfied: plotly in /usr/local/lib/python3.6/site-packages (3.2.1)
-Requirement already satisfied: pytz in /Users/sandy/Library/Python/3.6/lib/python/site-packages (from plotly) (2018.4)
-Requirement already satisfied: requests in /Users/sandy/Library/Python/3.6/lib/python/site-packages (from plotly) (2.18.4)
-Requirement already satisfied: retrying&gt;=1.3.3 in /usr/local/lib/python3.6/site-packages (from plotly) (1.3.3)
-Requirement already satisfied: six in /Users/sandy/Library/Python/3.6/lib/python/site-packages (from plotly) (1.11.0)
-Requirement already satisfied: decorator&gt;=4.0.6 in /usr/local/lib/python3.6/site-packages (from plotly) (4.3.0)
-Requirement already satisfied: nbformat&gt;=4.2 in /usr/local/lib/python3.6/site-packages (from plotly) (4.4.0)
-Requirement already satisfied: idna&lt;2.7,&gt;=2.5 in /Users/sandy/Library/Python/3.6/lib/python/site-packages (from requests-&gt;plotly) (2.6)
-Requirement already satisfied: chardet&lt;3.1.0,&gt;=3.0.2 in /Users/sandy/Library/Python/3.6/lib/python/site-packages (from requests-&gt;plotly) (3.0.4)
-Requirement already satisfied: urllib3&lt;1.23,&gt;=1.21.1 in /Users/sandy/Library/Python/3.6/lib/python/site-packages (from requests-&gt;plotly) (1.22)
-Requirement already satisfied: certifi&gt;=2017.4.17 in /Users/sandy/Library/Python/3.6/lib/python/site-packages (from requests-&gt;plotly) (2018.4.16)
-Requirement already satisfied: ipython-genutils in /usr/local/lib/python3.6/site-packages (from nbformat&gt;=4.2-&gt;plotly) (0.2.0)
-Requirement already satisfied: jsonschema!=2.5.0,&gt;=2.4 in /usr/local/lib/python3.6/site-packages (from nbformat&gt;=4.2-&gt;plotly) (2.6.0)
-Requirement already satisfied: traitlets&gt;=4.1 in /usr/local/lib/python3.6/site-packages (from nbformat&gt;=4.2-&gt;plotly) (4.3.2)
-Requirement already satisfied: jupyter-core in /usr/local/lib/python3.6/site-packages (from nbformat&gt;=4.2-&gt;plotly) (4.4.0)
-Requirement already up-to-date: pip in /usr/local/lib/python3.6/site-packages (18.1)
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -13176,13 +13145,11 @@ Requirement already up-to-date: pip in /usr/local/lib/python3.6/site-packages (1
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;/Users/sandy/Documents/ENPM808/Project/Github/google-revenue-prediction/train.csv&quot;</span><span class="p">)</span>
-<span class="n">test_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;/Users/sandy/Documents/ENPM808/Project/Github/google-revenue-prediction/test.csv&quot;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;trainEncoded.csv&quot;</span><span class="p">)</span>
+<span class="n">test_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;testEncoded.csv&quot;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13195,71 +13162,181 @@ Requirement already up-to-date: pip in /usr/local/lib/python3.6/site-packages (1
 
 <div class="output_area">
 
-    <div class="prompt"></div>
+    <div class="prompt output_prompt">Out[5]:</div>
 
 
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>/usr/local/lib/python3.6/site-packages/IPython/core/interactiveshell.py:2785: DtypeWarning: Columns (6) have mixed types. Specify dtype option on import or set low_memory=False.
-  interactivity=interactivity, compiler=compiler, result=result)
-/usr/local/lib/python3.6/site-packages/IPython/core/interactiveshell.py:2785: DtypeWarning: Columns (2) have mixed types. Specify dtype option on import or set low_memory=False.
-  interactivity=interactivity, compiler=compiler, result=result)
-</pre>
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>channelGrouping</th>
+      <th>date</th>
+      <th>fullVisitorId</th>
+      <th>visitId</th>
+      <th>visitNumber</th>
+      <th>visitStartTime</th>
+      <th>device.browser</th>
+      <th>device.deviceCategory</th>
+      <th>device.isMobile</th>
+      <th>device.operatingSystem</th>
+      <th>...</th>
+      <th>trafficSource.campaign</th>
+      <th>trafficSource.isTrueDirect</th>
+      <th>trafficSource.keyword</th>
+      <th>trafficSource.medium</th>
+      <th>trafficSource.referralPath</th>
+      <th>trafficSource.source</th>
+      <th>year</th>
+      <th>month</th>
+      <th>day</th>
+      <th>weekday</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4</td>
+      <td>2018-05-11</td>
+      <td>7.460955e+18</td>
+      <td>1526099341</td>
+      <td>2</td>
+      <td>1.526099e+09</td>
+      <td>25</td>
+      <td>1</td>
+      <td>True</td>
+      <td>0</td>
+      <td>...</td>
+      <td>25</td>
+      <td>0</td>
+      <td>516</td>
+      <td>4</td>
+      <td>1754</td>
+      <td>62</td>
+      <td>2018</td>
+      <td>5</td>
+      <td>11</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>2018-05-11</td>
+      <td>4.602525e+17</td>
+      <td>1526064483</td>
+      <td>166</td>
+      <td>1.526064e+09</td>
+      <td>25</td>
+      <td>0</td>
+      <td>False</td>
+      <td>6</td>
+      <td>...</td>
+      <td>25</td>
+      <td>0</td>
+      <td>516</td>
+      <td>3</td>
+      <td>1754</td>
+      <td>0</td>
+      <td>2018</td>
+      <td>5</td>
+      <td>11</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4</td>
+      <td>2018-05-11</td>
+      <td>3.461809e+18</td>
+      <td>1526067157</td>
+      <td>2</td>
+      <td>1.526067e+09</td>
+      <td>25</td>
+      <td>0</td>
+      <td>False</td>
+      <td>2</td>
+      <td>...</td>
+      <td>25</td>
+      <td>0</td>
+      <td>516</td>
+      <td>4</td>
+      <td>1754</td>
+      <td>62</td>
+      <td>2018</td>
+      <td>5</td>
+      <td>11</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2</td>
+      <td>2018-05-11</td>
+      <td>9.751295e+17</td>
+      <td>1526107551</td>
+      <td>4</td>
+      <td>1.526108e+09</td>
+      <td>25</td>
+      <td>1</td>
+      <td>True</td>
+      <td>20</td>
+      <td>...</td>
+      <td>25</td>
+      <td>0</td>
+      <td>516</td>
+      <td>3</td>
+      <td>1754</td>
+      <td>0</td>
+      <td>2018</td>
+      <td>5</td>
+      <td>11</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>2018-05-11</td>
+      <td>8.381673e+18</td>
+      <td>1526060254</td>
+      <td>1</td>
+      <td>1.526060e+09</td>
+      <td>33</td>
+      <td>2</td>
+      <td>True</td>
+      <td>17</td>
+      <td>...</td>
+      <td>25</td>
+      <td>1</td>
+      <td>516</td>
+      <td>4</td>
+      <td>1754</td>
+      <td>62</td>
+      <td>2018</td>
+      <td>5</td>
+      <td>11</td>
+      <td>4</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 42 columns</p>
 </div>
 </div>
 
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>20180430
-</pre>
-</div>
 </div>
 
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Split date into day month year and weekday! (Preprocessing does this now)</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">add_time_features</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">month</span><span class="p">)</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;day&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">day</span><span class="p">)</span>
-    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;weekday&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">weekday</span><span class="p">())</span>
-    
-    <span class="k">return</span> <span class="n">df</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_df</span> <span class="o">=</span> <span class="n">add_time_features</span><span class="p">(</span><span class="n">train_df</span><span class="p">)</span>
-<span class="n">test_df</span> <span class="o">=</span> <span class="n">add_time_features</span><span class="p">(</span><span class="n">test_df</span><span class="p">)</span>
-</pre></div>
-
-    </div>
 </div>
 </div>
 
@@ -13275,47 +13352,20 @@ Requirement already up-to-date: pip in /usr/local/lib/python3.6/site-packages (1
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Impute 0 for missing target values</span>
-<span class="n">train_df</span><span class="p">[</span><span class="s2">&quot;totals.transactionRevenue&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">train_df</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">test_df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">test_df</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+<span class="n">test_df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">test_df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+
 <span class="n">train_y</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="s2">&quot;totals.transactionRevenue&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 <span class="n">train_id</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="s2">&quot;fullVisitorId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-<span class="n">test_df</span><span class="p">[</span><span class="s2">&quot;totals.transactionRevenue&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
 <span class="n">test_y</span> <span class="o">=</span> <span class="n">test_df</span><span class="p">[</span><span class="s2">&quot;totals.transactionRevenue&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 <span class="n">test_id</span> <span class="o">=</span> <span class="n">test_df</span><span class="p">[</span><span class="s2">&quot;fullVisitorId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-<span class="n">test_id</span> <span class="o">=</span> <span class="n">test_df</span><span class="p">[</span><span class="s2">&quot;fullVisitorId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-
-
-<span class="c1"># label encode the categorical variables and convert the numerical variables to float </span>
-<span class="c1"># scikit.rf needs numerical data. One hot encoding is not good on rf.</span>
-<span class="n">cat_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;channelGrouping&quot;</span><span class="p">,</span> <span class="s2">&quot;device.browser&quot;</span><span class="p">,</span> 
-            <span class="s2">&quot;device.deviceCategory&quot;</span><span class="p">,</span> <span class="s2">&quot;device.operatingSystem&quot;</span><span class="p">,</span> 
-            <span class="s2">&quot;geoNetwork.city&quot;</span><span class="p">,</span> <span class="s2">&quot;geoNetwork.continent&quot;</span><span class="p">,</span> 
-            <span class="s2">&quot;geoNetwork.country&quot;</span><span class="p">,</span> <span class="s2">&quot;geoNetwork.metro&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;geoNetwork.networkDomain&quot;</span><span class="p">,</span> <span class="s2">&quot;geoNetwork.region&quot;</span><span class="p">,</span> 
-            <span class="s2">&quot;geoNetwork.subContinent&quot;</span><span class="p">,</span> <span class="s2">&quot;trafficSource.adContent&quot;</span><span class="p">,</span> 
-            <span class="s2">&quot;trafficSource.adwordsClickInfo.adNetworkType&quot;</span><span class="p">,</span> 
-            <span class="s2">&quot;trafficSource.adwordsClickInfo.gclId&quot;</span><span class="p">,</span> 
-            <span class="s2">&quot;trafficSource.adwordsClickInfo.page&quot;</span><span class="p">,</span> 
-            <span class="s2">&quot;trafficSource.adwordsClickInfo.slot&quot;</span><span class="p">,</span> <span class="s2">&quot;trafficSource.campaign&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;trafficSource.keyword&quot;</span><span class="p">,</span> <span class="s2">&quot;trafficSource.medium&quot;</span><span class="p">,</span> 
-            <span class="s2">&quot;trafficSource.referralPath&quot;</span><span class="p">,</span> <span class="s2">&quot;trafficSource.source&quot;</span><span class="p">,</span>
-            <span class="s1">&#39;trafficSource.adwordsClickInfo.isVideoAd&#39;</span><span class="p">,</span> <span class="s1">&#39;trafficSource.isTrueDirect&#39;</span><span class="p">]</span>
-
-<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cat_cols</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
-    <span class="n">lbl</span> <span class="o">=</span> <span class="n">preprocessing</span><span class="o">.</span><span class="n">LabelEncoder</span><span class="p">()</span>    
-    <span class="n">lbl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;str&#39;</span><span class="p">))</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">test_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;str&#39;</span><span class="p">)))</span>
-    <span class="n">train_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">lbl</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;str&#39;</span><span class="p">)))</span>
-    <span class="n">test_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">lbl</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">test_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;str&#39;</span><span class="p">)))</span>
-
-<span class="c1">#convert integer columns to float.</span>
-<span class="n">num_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;totals.pageviews&quot;</span><span class="p">,</span> <span class="s2">&quot;visitNumber&quot;</span><span class="p">,</span> <span class="s2">&quot;visitStartTime&quot;</span><span class="p">,</span> <span class="s1">&#39;totals.bounces&#39;</span><span class="p">,</span>  <span class="s1">&#39;totals.newVisits&#39;</span><span class="p">]</span>    
-<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">num_cols</span><span class="p">:</span>
-    <span class="n">train_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-    <span class="n">test_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">test_df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
 <span class="c1"># Split the train dataset into development and valid based on time </span>
 <span class="n">dev_df</span> <span class="o">=</span> <span class="n">train_df</span><span class="p">[</span><span class="n">train_df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">2018</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
@@ -13347,55 +13397,25 @@ Requirement already up-to-date: pip in /usr/local/lib/python3.6/site-packages (1
     <div class="prompt"></div>
 
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>channelGrouping
-device.browser
-device.deviceCategory
-device.operatingSystem
-geoNetwork.city
-geoNetwork.continent
-geoNetwork.country
-geoNetwork.metro
-geoNetwork.networkDomain
-geoNetwork.region
-geoNetwork.subContinent
-trafficSource.adContent
-trafficSource.adwordsClickInfo.adNetworkType
-trafficSource.adwordsClickInfo.gclId
-trafficSource.adwordsClickInfo.page
-trafficSource.adwordsClickInfo.slot
-trafficSource.campaign
-trafficSource.keyword
-trafficSource.medium
-trafficSource.referralPath
-trafficSource.source
-trafficSource.adwordsClickInfo.isVideoAd
-trafficSource.isTrueDirect
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>/usr/local/lib/python3.6/site-packages/ipykernel_launcher.py:43: FutureWarning: Comparing Series of datetimes with &#39;datetime.date&#39;.  Currently, the
+<pre>/usr/local/lib/python3.6/site-packages/ipykernel_launcher.py:14: FutureWarning: Comparing Series of datetimes with &#39;datetime.date&#39;.  Currently, the
 &#39;datetime.date&#39; is coerced to a datetime. In the future pandas will
 not coerce, and a TypeError will be raised. To retain the current
 behavior, convert the &#39;datetime.date&#39; to a datetime with
 &#39;pd.Timestamp&#39;.
-/usr/local/lib/python3.6/site-packages/ipykernel_launcher.py:44: FutureWarning: Comparing Series of datetimes with &#39;datetime.date&#39;.  Currently, the
+  
+/usr/local/lib/python3.6/site-packages/ipykernel_launcher.py:15: FutureWarning: Comparing Series of datetimes with &#39;datetime.date&#39;.  Currently, the
 &#39;datetime.date&#39; is coerced to a datetime. In the future pandas will
 not coerce, and a TypeError will be raised. To retain the current
 behavior, convert the &#39;datetime.date&#39; to a datetime with
 &#39;pd.Timestamp&#39;.
-/usr/local/lib/python3.6/site-packages/ipykernel_launcher.py:45: FutureWarning: Comparing Series of datetimes with &#39;datetime.date&#39;.  Currently, the
+  from ipykernel import kernelapp as app
+/usr/local/lib/python3.6/site-packages/ipykernel_launcher.py:16: FutureWarning: Comparing Series of datetimes with &#39;datetime.date&#39;.  Currently, the
 &#39;datetime.date&#39; is coerced to a datetime. In the future pandas will
 not coerce, and a TypeError will be raised. To retain the current
 behavior, convert the &#39;datetime.date&#39; to a datetime with
 &#39;pd.Timestamp&#39;.
+  app.launch_new_instance()
 </pre>
 </div>
 </div>
@@ -13417,12 +13437,12 @@ behavior, convert the &#39;datetime.date&#39; to a datetime with
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[80]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#BASELINE!</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="k">time</span>
+#BASELINE!
 
-<span class="o">%%</span><span class="k">time</span>
 val_pred_rf1 = pd.DataFrame({&quot;fullVisitorId&quot;:val_df[&quot;fullVisitorId&quot;].values})
 val_pred_rf1[&quot;transactionRevenue&quot;] = val_df[&quot;totals.transactionRevenue&quot;].values
 
@@ -13446,9 +13466,9 @@ print(np.sqrt(metrics.mean_squared_error(np.log1p(val_pred_rf1[&quot;transaction
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>13.850822744551245
-CPU times: user 560 ms, sys: 70.5 ms, total: 631 ms
-Wall time: 637 ms
+<pre>13.89539511019656
+CPU times: user 104 ms, sys: 17.9 ms, total: 122 ms
+Wall time: 128 ms
 </pre>
 </div>
 </div>
@@ -13467,7 +13487,7 @@ Wall time: 637 ms
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Import the model we are using</span>
@@ -13503,42 +13523,42 @@ Wall time: 637 ms
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>                                              importance
-totals.pageviews                                0.219648
-totals.timeOnSite                               0.118154
-visitStartTime                                  0.112671
-totals.hits                                     0.065865
-day                                             0.065470
-geoNetwork.country                              0.063355
-totals.sessionQualityDim                        0.052230
-weekday                                         0.036666
-visitNumber                                     0.036373
-geoNetwork.networkDomain                        0.035648
-geoNetwork.city                                 0.028542
-trafficSource.referralPath                      0.024326
-device.operatingSystem                          0.020930
-geoNetwork.region                               0.018018
-geoNetwork.metro                                0.016730
-month                                           0.013177
-trafficSource.isTrueDirect                      0.011275
-device.browser                                  0.008755
-totals.newVisits                                0.008309
-channelGrouping                                 0.008019
-device.deviceCategory                           0.005227
-trafficSource.source                            0.004958
-trafficSource.keyword                           0.004927
-device.isMobile                                 0.004730
-trafficSource.adwordsClickInfo.gclId            0.004512
-trafficSource.medium                            0.004476
-geoNetwork.subContinent                         0.001510
-trafficSource.adContent                         0.001481
-trafficSource.campaign                          0.001349
-geoNetwork.continent                            0.000882
-trafficSource.adwordsClickInfo.slot             0.000483
-trafficSource.adwordsClickInfo.adNetworkType    0.000442
-trafficSource.adwordsClickInfo.isVideoAd        0.000417
-trafficSource.adwordsClickInfo.page             0.000408
-year                                            0.000027
-totals.bounces                                  0.000011
+totals.pageviews                                0.219785
+totals.timeOnSite                               0.118630
+visitStartTime                                  0.112234
+day                                             0.065504
+totals.hits                                     0.065438
+geoNetwork.country                              0.063040
+totals.sessionQualityDim                        0.052284
+visitNumber                                     0.043714
+geoNetwork.networkDomain                        0.038508
+weekday                                         0.036407
+geoNetwork.city                                 0.027396
+trafficSource.referralPath                      0.024322
+device.operatingSystem                          0.021062
+geoNetwork.metro                                0.017790
+geoNetwork.region                               0.017645
+month                                           0.013310
+trafficSource.isTrueDirect                      0.011156
+device.browser                                  0.008867
+channelGrouping                                 0.008394
+trafficSource.source                            0.006495
+trafficSource.medium                            0.005515
+device.deviceCategory                           0.005042
+device.isMobile                                 0.004913
+trafficSource.adwordsClickInfo.gclId            0.004082
+trafficSource.keyword                           0.002524
+geoNetwork.subContinent                         0.001558
+trafficSource.adContent                         0.001233
+geoNetwork.continent                            0.000871
+trafficSource.campaign                          0.000827
+trafficSource.adwordsClickInfo.adNetworkType    0.000377
+trafficSource.adwordsClickInfo.slot             0.000358
+trafficSource.adwordsClickInfo.isVideoAd        0.000355
+trafficSource.adwordsClickInfo.page             0.000348
+year                                            0.000019
+totals.newVisits                                0.000000
+totals.bounces                                  0.000000
 </pre>
 </div>
 </div>
@@ -13549,11 +13569,11 @@ totals.bounces                                  0.000011
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#validation</span>
-<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">metrics</span>
+
 <span class="n">pred_val_rf</span><span class="p">[</span><span class="n">pred_val_rf</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">val_pred_rf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;fullVisitorId&quot;</span><span class="p">:</span><span class="n">val_df</span><span class="p">[</span><span class="s2">&quot;fullVisitorId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">})</span>
 <span class="n">val_pred_rf</span><span class="p">[</span><span class="s2">&quot;transactionRevenue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val_df</span><span class="p">[</span><span class="s2">&quot;totals.transactionRevenue&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
@@ -13576,7 +13596,7 @@ totals.bounces                                  0.000011
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>1.5171902108244966
+<pre>1.5089051375290736
 </pre>
 </div>
 </div>
@@ -13587,7 +13607,7 @@ totals.bounces                                  0.000011
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#test</span>
@@ -13613,7 +13633,7 @@ totals.bounces                                  0.000011
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>3.1631782950753666
+<pre>3.2573563949499444
 </pre>
 </div>
 </div>
@@ -13977,19 +13997,6 @@ Wall time: 776 ms
 
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
 </div>
     </div>
   </div>
