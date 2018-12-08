@@ -1,7 +1,7 @@
+# google-revenue-prediction
 1. Data Collection
-  # google-revenue-prediction
-  Solving https://www.kaggle.com/c/ga-customer-revenue-prediction
-  Original file: train_v2.csv(~24GB)
+    Solving https://www.kaggle.com/c/ga-customer-revenue-prediction
+    Original file: train_v2.csv(~24GB)
 
 2. Data Cleaning -> data_cleaning.ipynb
     1. The original CSV file is read as chunks.
